@@ -45,7 +45,7 @@ var BlogView = Backbone.View.extend({
     'click .edit-blog': 'edit',
     'click .update-blog': 'update'
   },
-  edit: function(){
+  edit: function(){ // Isn't the following a bit tedious and cumbersome? //
     // Update buttons for updating entry
     $('.edit-blog').hide();
     $('.delete-blog').hide();
@@ -57,7 +57,7 @@ var BlogView = Backbone.View.extend({
     var title = this.$('.title').html();
     var url = this.$('.url').html();
 
-    // Set up update input form
+    // Set up update input form (speaking of cumbersome) //
     this.$('.author').html('<input type="text" class="author-update" value="' + author + '"">');
     this.$('.title').html('<input type="text" class="title-update" value="' + title + '"">');
     this.$('.url').html('<input type="text" class="url-update" value="' + url + '"">');
@@ -75,15 +75,16 @@ var BlogView = Backbone.View.extend({
   }
 });
 
-// View for all blogs //
+// List of all blogs //
 var BlogsView = Backbone.View.extend({
-  model: blogs,
+  model: blogs, // the collection
   el: $('.blogs-list'),
   initialize: function(){
     var self = this;
     // Listen for changes to collection
     this.model.on('add', this.render, this);
     this.model.on('change', function(){
+      // Needed for proper updating //
       setTimeout(function(){
         self.render();
       }, 50);
@@ -91,8 +92,10 @@ var BlogsView = Backbone.View.extend({
   },
   render: function(){
     var self = this;
-    this.$el.html('');
+    this.$el.html(''); // Empty the list
+    // For each blog in the collection... //
     _.each(this.model.toArray(), function(blog){
+      // Add to single blogView to this collection instance
       self.$el.append((new BlogView({model: blog})).render().$el);
     });
     return this;
@@ -103,18 +106,22 @@ var BlogsView = Backbone.View.extend({
 var blogsView = new BlogsView();
 
 $(document).ready(function(){
+  // Storing add blog inputs //
   var $authorInput = $('.author-input'),
       $titleInput = $('.title-input'),
       $urlInput = $('.url-input');
-
+  // When add blog is clicked ... //
   $('.add-blog').on('click', function(){
+    // Create new instance of model with values from fields //
     var blog = new Blog({
       author: $authorInput.val(),
       title: $titleInput.val(),
       url: $urlInput.val()
     });
+    // Add model to collection
     blogs.add(blog);
 
+    // Clear fields //
     $authorInput.val('');
     $titleInput.val('');
     $urlInput.val('');
