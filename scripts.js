@@ -48,10 +48,10 @@ var BlogView = Backbone.View.extend({
   },
   edit: function(){ // Isn't the following a bit tedious and cumbersome? //
     // Update buttons for updating entry
-    $('.edit-blog').hide();
-    $('.delete-blog').hide();
-    $('.update-blog').show();
-    $('.cancel').show();
+    this.$('.edit-blog').hide();
+    this.$('.delete-blog').hide();
+    this.$('.update-blog').show();
+    this.$('.cancel').show();
 
     // Store values from this item's <span>s for use in update form
     var author = this.$('.author').html();
