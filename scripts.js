@@ -41,9 +41,10 @@ var BlogView = Backbone.View.extend({
     // On creation of new BlogView, set template to the Underscore template in index.html
     this.template = _.template($('.blogs-list-template').html());
   },
-  events: {
+  events: {  // Notice syntax 'event .class-name': 'function name' //
     'click .edit-blog': 'edit',
-    'click .update-blog': 'update'
+    'click .update-blog': 'update',
+    'click .cancel': 'cancel'
   },
   edit: function(){ // Isn't the following a bit tedious and cumbersome? //
     // Update buttons for updating entry
@@ -67,6 +68,10 @@ var BlogView = Backbone.View.extend({
     this.model.set('author', $('.author-update').val());
     this.model.set('title', $('.title-update').val());
     this.model.set('url', $('.url-update').val());
+  },
+  cancel: function(){
+    // 'Refreshes' to return to regular list //
+    blogsView.render();
   },
   render: function(){
     // On render, set the $el html to our template filled with the associated model's data
