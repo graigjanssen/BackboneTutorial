@@ -33,7 +33,8 @@ var blogs = new Blogs([]);
 
 // Backbone Views //
 
-// View for one blog //
+// One blog list item //
+// Represents a blog model in the browser, listens for input from user, makes changes to the model and reflects them //
 var BlogView = Backbone.View.extend({
   model: new Blog(),
   tagName: 'tr',
@@ -44,10 +45,11 @@ var BlogView = Backbone.View.extend({
   events: {  // Notice syntax 'event .class-name': 'function name' //
     'click .edit-blog': 'edit',
     'click .update-blog': 'update',
-    'click .cancel': 'cancel'
+    'click .cancel': 'cancel',
+    'click .delete-blog': 'delete'
   },
   edit: function(){ // Isn't the following a bit tedious and cumbersome? //
-    // Update buttons for updating entry
+    // Update buttons for updating entry (only the one that was clicked)
     this.$('.edit-blog').hide();
     this.$('.delete-blog').hide();
     this.$('.update-blog').show();
@@ -73,6 +75,9 @@ var BlogView = Backbone.View.extend({
     // 'Refreshes' to return to regular list //
     blogsView.render();
   },
+  delete: function(){
+    this.model.destroy(); // ouch! poor model :( //
+  },
   render: function(){
     // On render, set the $el html to our template filled with the associated model's data
     this.$el.html(this.template(this.model.toJSON()));
@@ -94,6 +99,7 @@ var BlogsView = Backbone.View.extend({
         self.render();
       }, 50);
     });
+    this.model.on('remove', this.render, this);
   },
   render: function(){
     var self = this;
