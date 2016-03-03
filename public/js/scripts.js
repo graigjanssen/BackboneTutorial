@@ -1,3 +1,6 @@
+// Because Backbone Model's default id property is 'id' and we need '_id' //
+Backbone.Model.prototype.idAttribute = '_id';
+
 // Backbone Model
 
 var Blog = Backbone.Model.extend({
@@ -71,13 +74,29 @@ var BlogView = Backbone.View.extend({
     this.model.set('author', $('.author-update').val());
     this.model.set('title', $('.title-update').val());
     this.model.set('url', $('.url-update').val());
+
+    this.model.save(null, {
+      success: function(response){
+        console.log('Successfully updated blog with id: ', response.toJSON()._id);
+      },
+      error: function(){
+        console.log('Failed to update blog');
+      }
+    });
   },
   cancel: function(){
     // 'Refreshes' to return to regular list //
     blogsView.render();
   },
   delete: function(){
-    this.model.destroy(); // ouch! poor model :( //
+    this.model.destroy({
+      success: function(response){
+        console.log('Successfully deleted blog with id: ', response.toJSON()._id);
+      },
+      error: function(){
+        console.log('Failed to delete blog');
+      }
+    }); // ouch! poor model :( //
   },
   render: function(){
     // On render, set the $el html to our template filled with the associated model's data

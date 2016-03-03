@@ -28,4 +28,18 @@ router.post('/', function(req, res){
   });
 });
 
+router.put('/:id', function(req, res){
+      // 1. Which thing to update?  2. New Data  3. Then what?
+  Blog.update({_id: req.params.id}, req.body, function(err){
+    res.send({_id: req.params.id});
+  });
+});
+
+router.delete('/:id', function(req, res){
+  Blog.remove({_id: req.params.id}, function(err){
+      // Client side is expecting to do response._id for console logging
+      res.send({_id: req.params.id});
+  });
+});
+
 module.exports = router;
